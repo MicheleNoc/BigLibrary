@@ -1,0 +1,165 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    margin: 0;
+    padding: 0;
+}
+
+.introbox {
+    text-align: center;
+    padding: 40px 20px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 20px auto;
+    max-width: 800px;
+}
+
+.introbox h1 {
+    font-size: 36px;
+    margin-bottom: 20px;
+    color: #343a40;
+}
+
+.introbox h4 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #6c757d;
+}
+
+.introbox .btn {
+    margin: 20px 0;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.introbox .btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: white;
+}
+
+.introbox .btn-primary:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.introbox div h4 {
+    margin-top: 20px;
+    font-size: 22px;
+    color: #343a40;
+}
+
+.book-box {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
+.card .title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.card .descr {
+    font-size: 16px;
+    margin-bottom: 15px;
+    text-align: center;
+    color: #555;
+}
+
+.card .rating {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.card .image img {
+    max-width: 100%;
+    border-radius: 4px;
+    margin-bottom: 15px;
+}
+
+.card .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+
+.card .buttons form {
+    margin: 0;
+}
+
+.card .buttons .btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.btn-warning {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #d9534f;
+    color: white;
+}
+.form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.form-container div {
+    margin-bottom: 15px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-container label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-container input,
+.form-container textarea {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.form-container input[type="number"] {
+    width: auto;
+}

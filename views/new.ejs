@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Libro</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <h1>Aggiungi un Nuovo Libro</h1>
+    <form action="/" method="post">
+        <div>
+            <label for="title">Titolo:</label>
+            <input type="text" id="title" name="title" value="<%= item.title %>" required>
+        </div>
+        <div>
+            <label for="description">Descrizione:</label>
+            <input id="descr" name="descr" required value="<%= item.descr %>" required>
+        </div>
+        <div>
+            <label for="rating">Rating:</label>
+            <input type="number" id="rating" name="rating" value="<%= item.rating %>" min="1" max="5" required>
+        </div>
+        <button type="submit">Aggiungi libro</button>
+    </form>
+</body>
+</html>

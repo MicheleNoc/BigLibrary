@@ -1,0 +1,141 @@
+<%- include("header.ejs") %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="main.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <title>Big Library</title>
+</head>
+<body>
+
+    <div class="introbox">
+        <h1>Benvenuti nella più grande libreria digitale!</h1>
+        <h4>Inserisci il tuo libro preferito oppure l'ultimo libro che hai letto e che vuoi consigliare al mondo</h4>
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary btn-block btn-add" data-bs-toggle="modal" data-bs-target="#formModal">
+            Aggiungi Libri
+        </button>
+        <div> 
+            <h4>Libri Aggiunti dalla community: <%= total %></h4>
+        </div>
+    </div>
+    <br>
+    
+    <!-- Add Form Modal -->
+    <div class="modal fade" id="formModal" tabindex="-1" role="dialog" aria-labelledby="formModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <form method="post" action="/add">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Aggiunta Libro</h5>
+                    </div>
+                    <div class="modal-body form-container">
+                        <div>
+                            <label for="title">Titolo</label>
+                            <input type="text" name="title" id="title" list="suggestions">
+                            <datalist id="suggestions"></datalist>
+                        </div>
+                        <div>
+                            <label for="descr">Descrizione</label>
+                            <textarea name="descr" id="descr"></textarea>
+                        </div>
+                        <div>
+                            <label for="rating">Rating ( da 1 a 5 ) </label>
+                            <input type="number" id="rating" name="rating" min="1" max="5" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annulla</button>
+                        <input type="submit" class="btn btn-primary" value="Salva">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="book-box">
+        <% item.forEach(function(item) { %>
+            <div class="card">
+                <h1 class="title"><%= item.title %></h1>
+                <p class="descr"><%= item.descr %></p>
+                <div class="rating">
+                    <p>Rating: <%= '★'.repeat(item.rating) + '☆'.repeat(5 - item.rating) %></p>
+                </div>
+                <h5>Aggiunto il: <%= formattedDateSQL %></h5>  
+                <div class="image">
+                    <img src="<%= item.cover_url %>" alt="">
+                </div>
+                <div class="buttons">
+                    <form action="/edit/<%= item.id %>" method="post">
+                        <a href="/edit/<%= item.id %>" class="btn btn-warning">Edit</a>
+                    </form>
+                    <form action="/delete/<%= item.id %>" name="deleteItemId" value="<%= item.id %>" method="post">
+                        <button type="submit" class="btn btn-danger">Cancella</button>
+                    </form>
+                </div>
+            </div>
+        <% }); %>
+    </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<script>
+    // 1. Aggiunge un event listener al campo di input con id 'title'
+    document.getElementById('title').addEventListener('input', function() {
+        // 2. Ottiene il valore corrente del campo di input
+        const query = this.value;
+        // 3. Mostra il valore della query nella console per il debug
+        console.log(`Query: ${query}`);
+        // 4. Se la lunghezza della query è inferiore a 3 caratteri, non eseguire ulteriori operazioni
+        if (query.length < 3) return;
+
+        // 5. Esegue una richiesta HTTP GET all'API di OpenLibrary con il titolo della query
+        fetch(`http://openlibrary.org/search.json?title=${query}`)
+            .then(response => {
+                // 6. Verifica se la risposta HTTP è stata eseguita con successo (status code 200-299)
+                if (!response.ok) {
+                    // 7. Se la risposta non è ok, solleva un errore con il codice di stato HTTP
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                // 8. Converte la risposta in formato JSON
+                return response.json();
+            })
+            .then(data => {
+                // 9. Mostra i dati ricevuti nella console per il debug
+                console.log('Data received:', data);
+                // 10. Ottiene il datalist con id 'suggestions'
+                const datalist = document.getElementById('suggestions');
+                // 11. Pulisce il contenuto del datalist (rimuove eventuali opzioni precedenti)
+                datalist.innerHTML = '';
+
+                // 12. Verifica se la struttura dei dati ricevuti è valida
+                if (!data.docs || !Array.isArray(data.docs)) {
+                    // 13. Se i dati non sono validi, mostra un errore nella console e termina la funzione
+                    console.error('Invalid data structure:', data);
+                    return;
+                }
+
+                // 14. Itera su ciascun libro ricevuto nella risposta
+                data.docs.forEach(book => {
+                    // 15. Crea un nuovo elemento <option> per ciascun libro
+                    const option = document.createElement('option');
+                    // 16. Imposta il valore dell'opzione al titolo del libro
+                    option.value = book.title;
+                    // 17. Aggiunge l'opzione al datalist
+                    datalist.appendChild(option);
+                });
+
+                // 18. Mostra il contenuto aggiornato del datalist nella console per il debug
+                console.log('Datalist updated:', datalist.innerHTML);
+            })
+            .catch(error => {
+                // 19. Se c'è un errore nella richiesta o nella gestione dei dati, mostra l'errore nella console
+                console.error('Error fetching data:', error);
+            });
+    });
+</script>
+
+</body>
+</html>
